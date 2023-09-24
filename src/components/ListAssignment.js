@@ -47,7 +47,9 @@ function ListAssignment(props) {
                       <td>
                         <Link to={`/gradeAssignment/${assignments[idx].id}`} >Grade</Link>
                       </td>
-                      <td>Edit</td>
+                      <td>
+                        <Link to={`/editAssignment/${assignments[idx].id}`} >Edit</Link>
+                      </td>
                       <td>Delete</td>
                     </tr>
                   ))}
