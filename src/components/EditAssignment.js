@@ -1,5 +1,6 @@
 import React, {useState, useEffect}  from 'react';
 import {SERVER_URL} from '../constants';
+import { useHistory } from "react-router-dom";
 
 
 function EditAssignment(props) { 
@@ -13,6 +14,10 @@ function EditAssignment(props) {
   console.log("AssignmentID="+s);
   assignmentId=s;
 
+  // how to redirect after a button clikc
+  // https://stackoverflow.com/questions/50644976/react-button-onclick-redirect-page
+  const history = useHistory();
+  
   useEffect(() => {
     fetchGrades()
    }, [] )
@@ -54,6 +59,7 @@ function EditAssignment(props) {
           if (res.ok) {
             fetchGrades(assignmentId);
             setMessage("Assignments saved.");
+            history.push(`/`);
           } else {
             setMessage("Save error. "+res.status);
             console.error('Save assignment error =' + res.status);
@@ -62,6 +68,7 @@ function EditAssignment(props) {
             setMessage("Exception. "+err);
             console.error('Save assignment exception =' + err);
         });
+        
    };        
     
 
