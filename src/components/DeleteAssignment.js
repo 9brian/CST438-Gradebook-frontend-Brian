@@ -18,11 +18,11 @@ function DeleteAssignment(props) {
     const history = useHistory();
   
     useEffect(() => {
-      fetchGrades()
+        fetchAssignment()
      }, [] )
   
    
-    const fetchGrades = ( ) => {
+    const fetchAssignment = ( ) => {
         setMessage('');
         console.log("fetchAssignment "+assignmentId);
         fetch(`${SERVER_URL}/assignment/${assignmentId}`)
@@ -48,7 +48,7 @@ function DeleteAssignment(props) {
             } )
             .then(res => {
             if (res.ok) {
-              fetchGrades(assignmentId);
+              fetchAssignment(assignmentId);
               setMessage("Assignments deleted.");
               history.push(`/`);
             } else {
@@ -68,7 +68,7 @@ function DeleteAssignment(props) {
             } )
             .then(res => {
             if (res.ok) {
-              fetchGrades(assignmentId);
+              fetchAssignment(assignmentId);
               setMessage("Assignments deleted.");
             } else {
               setMessage("Delete error. "+res.status);

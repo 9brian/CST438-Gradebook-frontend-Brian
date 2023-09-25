@@ -19,11 +19,11 @@ function EditAssignment(props) {
   const history = useHistory();
   
   useEffect(() => {
-    fetchGrades()
+    fetchAssignment()
    }, [] )
 
  
-  const fetchGrades = ( ) => {
+  const fetchAssignment = ( ) => {
       setMessage('');
       console.log("fetchAssignment "+assignmentId);
       fetch(`${SERVER_URL}/assignment/${assignmentId}`)
@@ -51,7 +51,7 @@ function EditAssignment(props) {
           } )
       .then(res => {
           if (res.ok) {
-            fetchGrades(assignmentId);
+            fetchAssignment(assignmentId);
             setMessage("Assignments saved.");
             history.push(`/`);
           } else {
