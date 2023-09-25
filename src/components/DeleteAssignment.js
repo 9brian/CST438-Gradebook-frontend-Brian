@@ -60,26 +60,32 @@ function DeleteAssignment(props) {
               console.error('Delete assignment exception =' + err);
             });
         } else {
+            
             fetch(`${SERVER_URL}/assignment/delete/${assignmentId}` , 
             {  
-              method: 'DELETE', 
-              headers: { 'Content-Type': 'application/json', }, 
-              body: JSON.stringify( assignment )
+                method: 'DELETE', 
+                headers: { 'Content-Type': 'application/json', }
             } )
             .then(res => {
-            if (res.ok) {
-              fetchAssignment(assignmentId);
-              setMessage("Assignments deleted.");
+                if (res.ok) {
+                fetchAssignment(assignmentId);
+                setMessage("Assignments deleted.");
+                history.push(`/`);
             } else {
-              setMessage("Delete error. "+res.status);
-              console.error('Delete assignment error =' + res.status);
+    
+                if(res.status === 400){
+                    setMessage("Grades exist for this assignment. Error. "+res.status);
+                } else {
+                    setMessage("Delete error. "+res.status);
+                }
+
+                console.error('Delete assignment error =' + res.status);
             }})
             .catch(err => {
-              setMessage("Exception. "+err);
-              console.error('Delete assignment exception =' + err);
+                setMessage("Exception. "+err);
+                console.error('Delete assignment exception =' + err);
             });
-        }
-  
+            }
         
      };        
       
