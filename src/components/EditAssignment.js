@@ -119,7 +119,7 @@ function EditAssignment(props) {
       console.log(e.target.value);
     }
  
-    const headers = ['Name', 'Due Date', 'Course Title', 'Course ID'];
+    const headers = ['Name', 'Due Date'];
 
     return (
       <div>
@@ -148,22 +148,6 @@ function EditAssignment(props) {
                   value={(assignment.dueDate)? assignment.dueDate : ""}  
                   type="text"
                   onChange={(e) => onChangeInput(e, 2)}
-                />
-              </td>
-              <td>
-                <input
-                  name="grade"
-                  value={(assignment.courseTitle)? assignment.courseTitle : ""}  
-                  type="text"
-                  onChange={(e) => onChangeInput(e, 3)}
-                />
-              </td>
-              <td>
-                <input
-                  name="grade"
-                  value={(assignment.courseId)? assignment.courseId : ""}  
-                  type="text"
-                  onChange={(e) => onChangeInput(e, 4)}
                 />
               </td>
             </tbody>
