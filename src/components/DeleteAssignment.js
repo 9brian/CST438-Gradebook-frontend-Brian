@@ -102,7 +102,7 @@ function DeleteAssignment(props) {
         
       }
    
-      const headers = ['Name', 'Due Date', 'Course Title', 'Course ID', 'force?'];
+      const headers = ['Name', 'Due Date', 'force?'];
   
       return (
         <div>
@@ -128,20 +128,6 @@ function DeleteAssignment(props) {
                   <input
                     name="grade"
                     value={(assignment.dueDate)? assignment.dueDate : ""}  
-                    type="text"
-                  />
-                </td>
-                <td>
-                  <input
-                    name="grade"
-                    value={(assignment.courseTitle)? assignment.courseTitle : ""}  
-                    type="text"
-                  />
-                </td>
-                <td>
-                  <input
-                    name="grade"
-                    value={(assignment.courseId)? assignment.courseId : ""}  
                     type="text"
                   />
                 </td>
