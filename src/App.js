@@ -4,6 +4,7 @@ import ListAssignment from './components/ListAssignment';
 import GradeAssignment from './components/GradeAssignment';
 import AddAssignment from './components/AddAssignment';
 import EditAssignment from './components/EditAssignment';
+import DeleteAssignment from './components/DeleteAssignment';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
               <Route path="/gradeAssignment" component={GradeAssignment} />
               <Route path="/addAssignment" component={AddAssignment} />
               <Route path="/editAssignment" component={EditAssignment} />
+              <Route path="/deleteAssignment" component={DeleteAssignment} />
               <Route render={ () => <h1>Page not found</h1>} />
             </Switch>
           </div>
