@@ -42,12 +42,6 @@ function EditAssignment(props) {
       console.log("Assignment.save ");
 
       console.log(`${assignmentId}`);
-      console.log(assignment);
-      // console.log(assignment.id);
-      // console.log(assignment.assignmentName);
-      // console.log(assignment.dueDate);
-      // console.log(assignment.courseTitle);
-      // console.log(assignment.courseId);
 
       fetch(`${SERVER_URL}/assignment/update/${assignmentId}` , 
           {  
@@ -95,7 +89,6 @@ function EditAssignment(props) {
           updatedAssignment.dueDate = e.target.value;
           console.log(updatedAssignment);
 
-          // console.log("works");
           setAssignment(updatedAssignment);
           
           // if(pattern.test(e.target.value)){

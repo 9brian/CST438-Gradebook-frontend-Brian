@@ -7,7 +7,7 @@ function ListAssignment(props) {
 
   const [assignments, setAssignments] = useState([]);
   const [message, setMessage] = useState('');
-
+ 
   useEffect(() => {
    // called once after intial render
    fetchAssignments();

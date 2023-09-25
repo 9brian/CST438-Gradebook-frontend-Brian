@@ -150,14 +150,6 @@ function AddAssignment(props) {
                   onChange={(e) => onChangeInput(e, 2)}
                 />
               </td>
-              {/* <td>
-                <input
-                  name="grade"
-                  value={(assignment.courseTitle)? assignment.courseTitle : ""}  
-                  type="text"
-                  onChange={(e) => onChangeInput(e, 3)}
-                />
-              </td> */}
               <td>
                 <input
                   name="grade"

@@ -13,7 +13,7 @@ function DeleteAssignment(props) {
     console.log("AssignmentID="+s);
     assignmentId=s;
 
-    // how to redirect after a button clikc
+    // how to redirect after a button click
     // https://stackoverflow.com/questions/50644976/react-button-onclick-redirect-page
     const history = useHistory();
   
@@ -39,15 +39,6 @@ function DeleteAssignment(props) {
       const saveAssignment = ( ) => {
         setMessage(''); 
         console.log("Assignment.save ");
-  
-        // console.log(`${assignmentId}`);
-        // console.log(assignment);
-        // console.log(assignment.id);
-        // console.log(assignment.assignmentName);
-        // console.log(assignment.dueDate);
-        // console.log(assignment.courseTitle);
-        // console.log(assignment.courseId);
-
         
         if (forcer === 'y'){
             fetch(`${SERVER_URL}/assignment/delete/${assignmentId}?force=true` , 
@@ -68,7 +59,6 @@ function DeleteAssignment(props) {
               setMessage("Exception. "+err);
               console.error('Delete assignment exception =' + err);
             });
-            console.log("here");
         } else {
             fetch(`${SERVER_URL}/assignment/delete/${assignmentId}` , 
             {  
@@ -132,7 +122,6 @@ function DeleteAssignment(props) {
                     name="grade"
                     value={(assignment.assignmentName)? assignment.assignmentName : ""}  
                     type="text"
-                    // onChange={(e) => onChangeInput(e,1)}
                   />
                 </td>
                 <td>
@@ -140,7 +129,6 @@ function DeleteAssignment(props) {
                     name="grade"
                     value={(assignment.dueDate)? assignment.dueDate : ""}  
                     type="text"
-                    // onChange={(e) => onChangeInput(e, 2)}
                   />
                 </td>
                 <td>
@@ -148,7 +136,6 @@ function DeleteAssignment(props) {
                     name="grade"
                     value={(assignment.courseTitle)? assignment.courseTitle : ""}  
                     type="text"
-                    // onChange={(e) => onChangeInput(e, 3)}
                   />
                 </td>
                 <td>
@@ -156,7 +143,6 @@ function DeleteAssignment(props) {
                     name="grade"
                     value={(assignment.courseId)? assignment.courseId : ""}  
                     type="text"
-                    // onChange={(e) => onChangeInput(e, 4)}
                   />
                 </td>
                 <td>
