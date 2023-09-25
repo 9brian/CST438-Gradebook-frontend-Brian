@@ -84,36 +84,15 @@ function EditAssignment(props) {
           // how to put it in js
           // (19|20)\d{2}(-)(0[1-9]|1[1,2])(-)(0[1-9]|[12][0-9]|3[01])
 
-          // var pattern = /(19|20)\d{2}(-)(0[1-9]|1[1,2])(-)(0[1-9]|[12][0-9]|3[01])/
+          var pattern = /(19|20)\d{2}(-)(0[1-9]|1[1,2])(-)(0[1-9]|[12][0-9]|3[01])/
           const updatedAssignment = { ...assignment };
           updatedAssignment.dueDate = e.target.value;
-          console.log(updatedAssignment);
-
           setAssignment(updatedAssignment);
           
-          // if(pattern.test(e.target.value)){
-            
-            
-          // } else {
-          //   setMessage("Date needs the correct format!");
-          // }
-        } else if(idx === 3){
-          const updatedAssignment = { ...assignment };
-    
-          updatedAssignment.courseTitle = e.target.value;
-          console.log(updatedAssignment);
-
-          setAssignment(updatedAssignment);
-        } else if(idx === 4){
-          if (/^\d*$/.test(e.target.value)){
-            const updatedAssignment = { ...assignment };
-    
-            updatedAssignment.courseId = e.target.value;
+          if(!pattern.test(e.target.value)){
             console.log(updatedAssignment);
-
-            setAssignment(updatedAssignment);
           } else {
-            setMessage("Course ID are digits only!");
+            setMessage("Date needs the correct format!");
           }
         }
       console.log(e.target.value);
