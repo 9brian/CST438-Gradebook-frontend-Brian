@@ -2,18 +2,31 @@ import React, { useState, useEffect } from 'react';
 import {SERVER_URL} from '../constants';
 import { useHistory } from "react-router-dom";
 
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
+
+import PropTypes from 'prop-types';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
+
 
 function AddAssignment(props) {
-
+  const [open, setOpen] = useState(false);
   const [assignment, setAssignment] = useState([]);
-  let assignmentId=0;
+  let assignmentObj=props;
+  let assignmentId = assignmentObj.id;
   const [message, setMessage] = useState('');
 
-  const path = window.location.pathname;  // /gradebook/123
+  const handleOpen = () => {
+    setOpen(true);
+  }
 
-  // how to redirect after a button clikc
-  // https://stackoverflow.com/questions/50644976/react-button-onclick-redirect-page
-  const history = useHistory();
+
+  const handleClose = () => {
+    setOpen(false);
+  }
 
   useEffect(() => {
     fetchAssignment()
@@ -37,6 +50,7 @@ function AddAssignment(props) {
     const saveAssignment = ( ) => {
       setMessage(''); 
       console.log("Assignment.save ");
+      assignment.id = 0;
 
       fetch(`${SERVER_URL}/assignment/new` , 
           {  
@@ -45,23 +59,27 @@ function AddAssignment(props) {
             body: JSON.stringify( assignment )
           } )
       .then(res => {
-          if (res.ok) {
+        if (res.ok) {
             fetchAssignment(assignmentId);
             setMessage("Assignments saved.");
-            history.push(`/`);
-          } else {
+            handleClose();
+            window.location.reload();
+            // history.push(`/`);
+        } else {
+            
             if(res.status === 500){
-              setMessage("Save error. "+res.status + "\n\nMake sure that course ID and Due Date are valid!");
+              setMessage("Save error. "+res.status + ". Insufficient data.");
             } else {
               setMessage("Save error. "+res.status);
             }
-            
             console.error('Save assignment error =' + res.status);
       }})
-        .catch(err => {
+      .catch(err => {
             setMessage("Exception. "+err);
             console.error('Save assignment exception =' + err);
-        });
+      });
+    
+      
    };        
     
 
@@ -111,47 +129,52 @@ function AddAssignment(props) {
     const headers = ['Name', 'Due Date', 'Course ID'];
 
     return (
-      <div>
-        <h3>Assignment Grades</h3>
-        <div margin="auto" >
-          <h4 id="gmessage" >{message}&nbsp;</h4>
-          <table className="Center"> 
-            <thead>
-              <tr>
-                {headers.map((title, idx) => (<th key={idx}>{title}</th>))}
-              </tr>
-            </thead>
-            <tbody>
-
-              <td>
-                <input
-                  name="grade"
-                  value={(assignment.assignmentName)? assignment.assignmentName : ""}  
-                  type="text"
-                  onChange={(e) => onChangeInput(e,1)}
-                />
-              </td>
-              <td>
-                <input
-                  name="grade"
-                  value={(assignment.dueDate)? assignment.dueDate : "YYYY-MM-DD"}  
-                  type="text"
-                  onChange={(e) => onChangeInput(e, 2)}
-                />
-              </td>
-              <td>
-                <input
-                  name="grade"
-                  value={(assignment.courseId)? assignment.courseId : ""}  
-                  type="text"
-                  onChange={(e) => onChangeInput(e, 4)}
-                />
-              </td>
-            </tbody>
-          </table>
-          <button id="sedit" type="button" margin="auto" onClick={saveAssignment}>Save Assignment</button>
+      <div> 
+          <Button onClick={handleOpen}>Add assignment</Button>
+          <Dialog open={open}> 
+          <DialogContent>
+            <DialogTitle>Add Assignment</DialogTitle>  
+            <p>{message}</p>      
+            <table id="Center" > 
+                <thead>
+                  <tr>
+                      {headers.map((s, idx) => (<th key={idx}>{s}</th>))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <td>
+                    <TextField
+                      name="grade"
+                      value={(assignment.assignmentName)? assignment.assignmentName : ""}  
+                      type="text"
+                      onChange={(e) => onChangeInput(e,1)}
+                    />
+                  </td>
+                  <td>
+                    <TextField
+                      name="grade"
+                      value={(assignment.dueDate)? assignment.dueDate : "YYYY-MM-DD"}  
+                      type="text"
+                      onChange={(e) => onChangeInput(e, 2)}
+                    />
+                  </td>
+                  <td>
+                    <TextField
+                      name="grade"
+                      value={(assignment.courseId)? assignment.courseId : ""}  
+                      type="text"
+                      onChange={(e) => onChangeInput(e, 4)}
+                    />
+                  </td>
+                </tbody>
+            </table>
+            <Button id="sedit" type="button" margin="auto" onClick={saveAssignment}>Save Assignment</Button>
+            <DialogActions>
+                <Button onClick={handleClose}>Close</Button>
+            </DialogActions>
+            </DialogContent>
+            </Dialog>
         </div>
-      </div>
     );
 }
 

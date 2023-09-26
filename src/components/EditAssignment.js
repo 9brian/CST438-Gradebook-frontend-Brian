@@ -1,29 +1,34 @@
-import React, {useState, useEffect}  from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 import {SERVER_URL} from '../constants';
-import { useHistory } from "react-router-dom";
+
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import DialogTitle from '@mui/material/DialogTitle';
+import TextField from '@mui/material/TextField';
 
 
-function EditAssignment(props) { 
+function EditAssignment(props) {
+    const [open, setOpen] = useState(false);
+    const [assignment, setAssignment] = useState([]);
+    let assignmentObj=props;
+    let assignmentId = assignmentObj.id;
+    console.log(assignmentId);
+    const [message, setMessage] = useState('');
 
-  const [assignment, setAssignment] = useState([]);
-  let assignmentId=0;
-  const [message, setMessage] = useState('');
+    const handleOpen = () => {
+      setOpen(true);
+      console.log(assignmentId);
+    }
 
-  const path = window.location.pathname;  // /gradebook/123
-  const s = /\d+$/.exec(path)[0];
-  console.log("AssignmentID="+s);
-  assignmentId=s;
 
-  // how to redirect after a button clikc
-  // https://stackoverflow.com/questions/50644976/react-button-onclick-redirect-page
-  const history = useHistory();
-  
-  useEffect(() => {
-    fetchAssignment()
-   }, [] )
+    const handleClose = () => {
+      setOpen(false);
+    }
 
- 
-  const fetchAssignment = ( ) => {
+    const fetchAssignment = ( ) => {
       setMessage('');
       console.log("fetchAssignment "+assignmentId);
       fetch(`${SERVER_URL}/assignment/${assignmentId}`)
@@ -34,40 +39,44 @@ function EditAssignment(props) {
         console.error("fetch assignment error "+ err);
       });
     }
-  
-    // when submit button pressed, send updated grades to back end 
-    //  and then fetch the new grades.
+
+    useEffect(() => {
+      fetchAssignment()
+      }, [] )
+    
     const saveAssignment = ( ) => {
       setMessage(''); 
       console.log("Assignment.save ");
-
-      console.log(`${assignmentId}`);
-
+      // console.log(`${assignmentId}` + " save");
+      // console.log(assignment);
+      
       fetch(`${SERVER_URL}/assignment/update/${assignmentId}` , 
-          {  
+        {  
             method: 'PUT', 
             headers: { 'Content-Type': 'application/json', }, 
             body: JSON.stringify( assignment )
-          } )
+        } )
       .then(res => {
-          if (res.ok) {
+        
+        if (res.ok) {
             fetchAssignment(assignmentId);
             setMessage("Assignments saved.");
-            history.push(`/`);
-          } else {
+            handleClose();
+            window.location.reload();
+         } else {
             setMessage("Save error. "+res.status);
             console.error('Save assignment error =' + res.status);
       }})
-        .catch(err => {
-            setMessage("Exception. "+err);
-            console.error('Save assignment exception =' + err);
-        });
-        
-   };        
-    
+      .catch(err => {
+          setMessage("Exception. "+err);
+          console.error('Save assignment exception =' + err);
+      });
+      
+      }; 
 
     const onChangeInput = (e, idx) => {
       setMessage('');
+      console.log(e,idx);
 
         if(idx === 1){
           const updatedAssignment = { ...assignment };
@@ -89,7 +98,7 @@ function EditAssignment(props) {
           updatedAssignment.dueDate = e.target.value;
           setAssignment(updatedAssignment);
           
-          if(!pattern.test(e.target.value)){
+          if(pattern.test(e.target.value)){
             console.log(updatedAssignment);
           } else {
             setMessage("Date needs the correct format!");
@@ -97,44 +106,48 @@ function EditAssignment(props) {
         }
       console.log(e.target.value);
     }
- 
-    const headers = ['Name', 'Due Date'];
 
-    return (
-      <div>
-        <h3>Assignment Grades</h3>
-        <div margin="auto" >
-          <h4 id="gmessage" >{message}&nbsp;</h4>
-          <table className="Center"> 
-            <thead>
-              <tr>
-                {headers.map((title, idx) => (<th key={idx}>{title}</th>))}
-              </tr>
-            </thead>
-            <tbody>
+    const headers = ['Name', 'Due Date'];  
 
-              <td>
-                <input
-                  name="grade"
-                  value={(assignment.assignmentName)? assignment.assignmentName : ""}  
-                  type="text"
-                  onChange={(e) => onChangeInput(e,1)}
-                />
-              </td>
-              <td>
-                <input
-                  name="grade"
-                  value={(assignment.dueDate)? assignment.dueDate : ""}  
-                  type="text"
-                  onChange={(e) => onChangeInput(e, 2)}
-                />
-              </td>
-            </tbody>
-          </table>
-          <button id="sedit" type="button" margin="auto" onClick={saveAssignment}>Save Assignment</button>
+    return(
+        <div> 
+          <Button onClick={handleOpen}>Edit</Button>
+          <Dialog open={open}> 
+          <DialogContent>
+            <DialogTitle>Edit Assignment</DialogTitle>  
+            <p>{message}</p>      
+            <table id="Center" > 
+                <thead>
+                  <tr>
+                      {headers.map((s, idx) => (<th key={idx}>{s}</th>))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <td>
+                    <TextField
+                    name="grade"
+                    value={(assignment.assignmentName)? assignment.assignmentName : ""}  
+                    type="text"
+                    onChange={(e) => onChangeInput(e,1)}
+                  />
+                  </td>
+                  <td>
+                    <TextField
+                    name="grade"
+                    value={(assignment.dueDate)? assignment.dueDate : ""}  
+                    type="text"
+                    onChange={(e) => onChangeInput(e, 2)}
+                    />
+                  </td>
+                </tbody>
+            </table>
+            <Button id="sedit" type="button" margin="auto" onClick={saveAssignment}>Save Assignment</Button>
+            <DialogActions>
+                <Button onClick={handleClose}>Close</Button>
+            </DialogActions>
+            </DialogContent>
+            </Dialog>
         </div>
-      </div>
-    )
+    );
 }
-
 export default EditAssignment;

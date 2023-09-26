@@ -2,6 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {SERVER_URL} from '../constants';
 import {Link} from 'react-router-dom';
 import { Button } from '@mui/base';
+import EditAssignment from './EditAssignment';
+import AddAssignment from './AddAssignment';
 
 
 function ListAssignment(props) {
@@ -23,6 +25,32 @@ function ListAssignment(props) {
       setAssignments(data);
      }) 
     .catch(err => console.error(err)); 
+  }
+
+   /*
+  *  update student
+  */ 
+   const assignmentEdit = (idx) => {
+    // setMessage('here');
+    console.log(idx);
+
+    // fetch(`${SERVER_URL}/students/update?email=${email}&statusCode=${code}&statusMsg=${status}`, {
+    //     method: 'PUT',
+    // })
+    //     .then((response) => {
+    //         if (response.ok) {
+    //             console.log("Student updated successfully");
+    //             setMessage("Student updated successfully.");
+    //             fetchAssignments();
+    //         } else {
+    //             console.log("Status update error");
+    //             setMessage("Error updating status: " + response.statusText);
+    //         }
+    //     })
+    //     .catch((error) => {
+    //         console.error("Exception updating status:", error);
+    //         setMessage("Exception updating status: " + error);
+    //     });
   }
 
   const deleteAssignment = (assignmentId) => {
@@ -77,7 +105,7 @@ function ListAssignment(props) {
   }
   
   
-    const headers = ['Assignment Name', 'Course Title', 'Due Date', ' ', ' ', <Link to={`/addAssignment/}`} >Add</Link>];
+    const headers = ['Assignment Name', 'Course Title', 'Due Date', ' ', ' ', ' '];
     
     return (
       <div>
@@ -100,7 +128,8 @@ function ListAssignment(props) {
                         <Link to={`/gradeAssignment/${assignments[idx].id}`} >Grade</Link>
                       </td>
                       <td>
-                        <Link to={`/editAssignment/${assignments[idx].id}`} >Edit</Link>
+                        {/* <Link to={`/editAssignment/${assignments[idx].id}`} >Edit</Link> */}
+                        <EditAssignment id={assignments[idx].id}>Edit</EditAssignment>
                       </td>
                       <td>
                         <Button onClick={() => deleteAssignment(assignments[idx].id)}>Delete</Button>
@@ -108,6 +137,8 @@ function ListAssignment(props) {
                     </tr>
                   ))}
                 </tbody>
+                <AddAssignment>Add</AddAssignment>
+                {/* <Link to={`/addAssignment/}`} >Add</Link> */}
               </table>
           </div>
       </div>
