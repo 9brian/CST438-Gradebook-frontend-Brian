@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {SERVER_URL} from '../constants';
 import {Link} from 'react-router-dom';
+import { Button } from '@mui/base';
 
 
 function ListAssignment(props) {
@@ -22,6 +23,57 @@ function ListAssignment(props) {
       setAssignments(data);
      }) 
     .catch(err => console.error(err)); 
+  }
+
+  const deleteAssignment = (assignmentId) => {
+    console.log(assignmentId);
+    
+    // Initial delete (should fail UNLESS grades do not exist)
+    fetch(`${SERVER_URL}/assignment/delete/${assignmentId}` , 
+    {  
+      method: 'DELETE', 
+      headers: { 'Content-Type': 'application/json', }
+    } )
+    .then(res => {
+      if (res.ok) { // This should ONLY pass when grades do NOT exist
+        // fetchAssignment(assignmentId);
+        setMessage("Assignments deleted.");
+        window.location.reload();
+        // history.push(`/`);
+      } else { // when grades DO exist
+
+        if(res.status === 400){ // This should fail because grades do exist
+
+            // set window popup, for force = true
+            if(window.confirm("Grades exist for this assignment. Do you want to force delete?")){
+              // force delete
+                fetch(`${SERVER_URL}/assignment/delete/${assignmentId}?force=true` , 
+                {  
+                  method: 'DELETE', 
+                  headers: { 'Content-Type': 'application/json', }
+                } )
+                .then(res => {
+                  if (res.ok) {
+                    setMessage("Assignments deleted.");
+                    window.location.reload(); // reload after deletion
+                  } else {
+                    setMessage("Delete error. "+res.status);
+                    console.error('Delete assignment error =' + res.status);
+                }})
+                .catch(err => {
+                    setMessage("Exception. "+err);
+                    console.error('Delete assignment exception =' + err);
+                });
+            }
+        } else {
+          setMessage("Delete error. "+res.status);
+        }
+
+        console.error('Delete assignment error =' + res.status);
+    }}).catch(err => {
+      setMessage("Exception. "+err);
+      console.error('Delete assignment exception =' + err);
+    });
   }
   
   
@@ -51,7 +103,7 @@ function ListAssignment(props) {
                         <Link to={`/editAssignment/${assignments[idx].id}`} >Edit</Link>
                       </td>
                       <td>
-                        <Link to={`/deleteAssignment/${assignments[idx].id}`} >Delete</Link>
+                        <Button onClick={() => deleteAssignment(assignments[idx].id)}>Delete</Button>
                       </td>
                     </tr>
                   ))}
