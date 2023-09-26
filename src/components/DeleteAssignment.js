@@ -39,76 +39,59 @@ function DeleteAssignment(props) {
       const saveAssignment = ( ) => {
         setMessage(''); 
         console.log("Assignment.save ");
-        
-        if (forcer === 'y'){
-            fetch(`${SERVER_URL}/assignment/delete/${assignmentId}?force=true` , 
-            {  
-              method: 'DELETE', 
-              headers: { 'Content-Type': 'application/json', }
-            } )
-            .then(res => {
-            if (res.ok) {
-              fetchAssignment(assignmentId);
-              setMessage("Assignments deleted.");
-              history.push(`/`);
-            } else {
-              setMessage("Delete error. "+res.status);
-              console.error('Delete assignment error =' + res.status);
-            }})
-            .catch(err => {
-              setMessage("Exception. "+err);
-              console.error('Delete assignment exception =' + err);
-            });
-        } else {
-            
-            fetch(`${SERVER_URL}/assignment/delete/${assignmentId}` , 
-            {  
-                method: 'DELETE', 
-                headers: { 'Content-Type': 'application/json', }
-            } )
-            .then(res => {
-                if (res.ok) {
-                fetchAssignment(assignmentId);
-                setMessage("Assignments deleted.");
-                history.push(`/`);
-            } else {
-    
-                if(res.status === 400){
-                    setMessage("Grades exist for this assignment. Error. "+res.status);
-                } else {
-                    setMessage("Delete error. "+res.status);
-                }
 
-                console.error('Delete assignment error =' + res.status);
-            }})
-            .catch(err => {
-                setMessage("Exception. "+err);
-                console.error('Delete assignment exception =' + err);
-            });
+        fetch(`${SERVER_URL}/assignment/delete/${assignmentId}` , 
+        {  
+            method: 'DELETE', 
+            headers: { 'Content-Type': 'application/json', }
+        } )
+        .then(res => {
+            if (res.ok) {
+            fetchAssignment(assignmentId);
+            setMessage("Assignments deleted.");
+            history.push(`/`);
+        } else {
+
+            if(res.status === 400){
+                setMessage("Grades exist for this assignment. Error. "+res.status);
+                if(window.confirm("Grades exist for this assignment. Do you want to force delete?")){
+                  fetch(`${SERVER_URL}/assignment/delete/${assignmentId}?force=true` , 
+                  {  
+                    method: 'DELETE', 
+                    headers: { 'Content-Type': 'application/json', }
+                  } )
+                  .then(res => {
+                  if (res.ok) {
+                    fetchAssignment(assignmentId);
+                    setMessage("Assignments deleted.");
+                    history.push(`/`);
+                  } else {
+                    setMessage("Delete error. "+res.status);
+                    console.error('Delete assignment error =' + res.status);
+                  }})
+                  .catch(err => {
+                    setMessage("Exception. "+err);
+                    console.error('Delete assignment exception =' + err);
+                  });
+                }
+            } else {
+                setMessage("Delete error. "+res.status);
             }
-        
+
+            console.error('Delete assignment error =' + res.status);
+        }})
+        .catch(err => {
+            setMessage("Exception. "+err);
+            console.error('Delete assignment exception =' + err);
+        });
      };        
       
   
       const onChangeInput = (e, idx) => {
         setMessage('');
-  
-          if(idx === 1){
-            // https://stackoverflow.com/questions/47545450/regex-match-any-single-character-one-character-only
-            // how to get just n or just y
-
-            if(/^[ny]$/.test(e.target.value)){
-                console.log("hello");
-                
-            } else {
-                setMessage("Force accepts only n or y!");
-            }
-            setForcer(e.target.value);
-         } 
-        
       }
    
-      const headers = ['Name', 'Due Date', 'force?'];
+      const headers = ['Name', 'Due Date'];
   
       return (
         <div>
@@ -138,16 +121,10 @@ function DeleteAssignment(props) {
                   />
                 </td>
                 <td>
-                  <input
-                    name="force"
-                    value={(forcer)}  
-                    type="text"
-                    onChange={(e) => onChangeInput(e, 1)}
-                  />
                 </td>
               </tbody>
             </table>
-            <button id="sedit" type="button" margin="auto" onClick={saveAssignment}>Save Assignment</button>
+            <button id="sedit" type="button" margin="auto" onClick={saveAssignment}>Delete Assignment</button>
           </div>
         </div>
       )
