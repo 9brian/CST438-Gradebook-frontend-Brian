@@ -16,7 +16,7 @@ function ListAssignment(props) {
    fetchAssignments();
   }, [] )
  
-  const fetchAssignments = () => {
+  const fetchAssignments = () => { // fetch all assignments
     console.log("fetchAssignments");
     fetch(`${SERVER_URL}/assignment`)
     .then((response) => response.json() ) 
@@ -27,32 +27,7 @@ function ListAssignment(props) {
     .catch(err => console.error(err)); 
   }
 
-   /*
-  *  update student
-  */ 
-   const assignmentEdit = (idx) => {
-    // setMessage('here');
-    console.log(idx);
-
-    // fetch(`${SERVER_URL}/students/update?email=${email}&statusCode=${code}&statusMsg=${status}`, {
-    //     method: 'PUT',
-    // })
-    //     .then((response) => {
-    //         if (response.ok) {
-    //             console.log("Student updated successfully");
-    //             setMessage("Student updated successfully.");
-    //             fetchAssignments();
-    //         } else {
-    //             console.log("Status update error");
-    //             setMessage("Error updating status: " + response.statusText);
-    //         }
-    //     })
-    //     .catch((error) => {
-    //         console.error("Exception updating status:", error);
-    //         setMessage("Exception updating status: " + error);
-    //     });
-  }
-
+  // delete assignment
   const deleteAssignment = (assignmentId) => {
     console.log(assignmentId);
     
@@ -70,7 +45,7 @@ function ListAssignment(props) {
         // history.push(`/`);
       } else { // when grades DO exist
 
-        if(res.status === 400){ // This should fail because grades do exist
+        if(res.status === 400){ // This should fail on 400 because grades do exist
 
             // set window popup, for force = true
             if(window.confirm("Grades exist for this assignment. Do you want to force delete?")){
@@ -93,17 +68,16 @@ function ListAssignment(props) {
                     console.error('Delete assignment exception =' + err);
                 });
             }
-        } else {
+        } else { // anything other than a 400 error
           setMessage("Delete error. "+res.status);
         }
 
         console.error('Delete assignment error =' + res.status);
-    }}).catch(err => {
+    }}).catch(err => { // catch error
       setMessage("Exception. "+err);
       console.error('Delete assignment exception =' + err);
     });
   }
-  
   
     const headers = ['Assignment Name', 'Course Title', 'Due Date', ' ', ' ', ' '];
     
@@ -128,7 +102,6 @@ function ListAssignment(props) {
                         <Link to={`/gradeAssignment/${assignments[idx].id}`} >Grade</Link>
                       </td>
                       <td>
-                        {/* <Link to={`/editAssignment/${assignments[idx].id}`} >Edit</Link> */}
                         <EditAssignment id={assignments[idx].id}>Edit</EditAssignment>
                       </td>
                       <td>
@@ -138,7 +111,6 @@ function ListAssignment(props) {
                   ))}
                 </tbody>
                 <AddAssignment>Add</AddAssignment>
-                {/* <Link to={`/addAssignment/}`} >Add</Link> */}
               </table>
           </div>
       </div>

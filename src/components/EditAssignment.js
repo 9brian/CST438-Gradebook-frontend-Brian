@@ -1,11 +1,9 @@
+import React, { useState, useEffect } from 'react';
+import {SERVER_URL} from '../constants';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-import {SERVER_URL} from '../constants';
-
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
@@ -14,8 +12,8 @@ function EditAssignment(props) {
     const [open, setOpen] = useState(false);
     const [assignment, setAssignment] = useState([]);
     let assignmentObj=props;
-    let assignmentId = assignmentObj.id;
-    console.log(assignmentId);
+    let assignmentId = assignmentObj.id; // passed in assignment id
+    // console.log(assignmentId);
     const [message, setMessage] = useState('');
 
     const handleOpen = () => {
@@ -28,7 +26,7 @@ function EditAssignment(props) {
       setOpen(false);
     }
 
-    const fetchAssignment = ( ) => {
+    const fetchAssignment = ( ) => { // fetch assignment
       setMessage('');
       console.log("fetchAssignment "+assignmentId);
       fetch(`${SERVER_URL}/assignment/${assignmentId}`)
@@ -74,7 +72,7 @@ function EditAssignment(props) {
       
       }; 
 
-    const onChangeInput = (e, idx) => {
+    const onChangeInput = (e, idx) => { // handle textfield change
       setMessage('');
       console.log(e,idx);
 
@@ -82,7 +80,7 @@ function EditAssignment(props) {
           const updatedAssignment = { ...assignment };
     
           updatedAssignment.assignmentName = e.target.value;
-          console.log(updatedAssignment);
+          // console.log(updatedAssignment);
 
           setAssignment(updatedAssignment);
         } else if(idx === 2){

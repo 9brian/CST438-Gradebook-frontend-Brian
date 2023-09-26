@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {SERVER_URL} from '../constants';
-import { useHistory } from "react-router-dom";
-
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
-
-import PropTypes from 'prop-types';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
