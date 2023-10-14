@@ -123,7 +123,7 @@ function EditAssignment(props) {
                 <tbody>
                   <td>
                     <TextField
-                    name="grade"
+                    name="assignmentName"
                     value={(assignment.assignmentName)? assignment.assignmentName : ""}  
                     type="text"
                     onChange={(e) => onChangeInput(e,1)}
@@ -131,7 +131,7 @@ function EditAssignment(props) {
                   </td>
                   <td>
                     <TextField
-                    name="grade"
+                    name="assignmentDueDate"
                     value={(assignment.dueDate)? assignment.dueDate : ""}  
                     type="text"
                     onChange={(e) => onChangeInput(e, 2)}
