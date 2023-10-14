@@ -140,7 +140,7 @@ function AddAssignment(props) {
                 <tbody>
                   <td>
                     <TextField
-                      name="grade"
+                      name="assignmentName"
                       value={(assignment.assignmentName)? assignment.assignmentName : ""}  
                       type="text"
                       onChange={(e) => onChangeInput(e,1)}
@@ -148,7 +148,7 @@ function AddAssignment(props) {
                   </td>
                   <td>
                     <TextField
-                      name="grade"
+                      name="assignmentDueDate"
                       value={(assignment.dueDate)? assignment.dueDate : "YYYY-MM-DD"}  
                       type="text"
                       onChange={(e) => onChangeInput(e, 2)}
@@ -156,7 +156,7 @@ function AddAssignment(props) {
                   </td>
                   <td>
                     <TextField
-                      name="grade"
+                      name="assignmentCourseID"
                       value={(assignment.courseId)? assignment.courseId : ""}  
                       type="text"
                       onChange={(e) => onChangeInput(e, 4)}
