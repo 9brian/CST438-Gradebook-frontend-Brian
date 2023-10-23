@@ -32,7 +32,13 @@ function AddAssignment(props) {
   const fetchAssignment = ( ) => {
       setMessage('');
       console.log("fetchAssignment "+assignmentId);
-      fetch(`${SERVER_URL}/assignment`)
+      const token = sessionStorage.getItem('jwt');
+
+      fetch(`${SERVER_URL}/assignment`, {
+        headers: {
+          'Authorization' : `${token}`
+        }
+      })
       .then((response) => response.json()) 
       .then((data) => { setAssignment(data) })        
       .catch(err => { 
@@ -47,11 +53,13 @@ function AddAssignment(props) {
       setMessage(''); 
       console.log("Assignment.save ");
       assignment.id = 0;
+      const token = sessionStorage.getItem('jwt');
 
       fetch(`${SERVER_URL}/assignment/new` , 
           {  
             method: 'POST', 
-            headers: { 'Content-Type': 'application/json', }, 
+            headers: { 'Content-Type': 'application/json', 
+                        'Authorization' : `${token}`}, 
             body: JSON.stringify( assignment )
           } )
       .then(res => {
@@ -60,7 +68,6 @@ function AddAssignment(props) {
             setMessage("Assignments saved.");
             handleClose();
             window.location.reload();
-            // history.push(`/`);
         } else {
             
             if(res.status === 500){
@@ -86,7 +93,6 @@ function AddAssignment(props) {
           const updatedAssignment = { ...assignment };
     
           updatedAssignment.assignmentName = e.target.value;
-          console.log(updatedAssignment);
 
           setAssignment(updatedAssignment);
         } else if(idx === 2){
@@ -103,7 +109,7 @@ function AddAssignment(props) {
           setAssignment(updatedAssignment);
           
           if(pattern.test(e.target.value)){
-            console.log(updatedAssignment);
+
           } else {
             setMessage("Date needs the correct format!");
           }
@@ -112,7 +118,6 @@ function AddAssignment(props) {
             const updatedAssignment = { ...assignment };
     
             updatedAssignment.courseId = e.target.value;
-            console.log(updatedAssignment);
 
             setAssignment(updatedAssignment);
           } else {
@@ -140,26 +145,29 @@ function AddAssignment(props) {
                 <tbody>
                   <td>
                     <TextField
-                      name="grade"
+                      name="assignmentName"
                       value={(assignment.assignmentName)? assignment.assignmentName : ""}  
                       type="text"
                       onChange={(e) => onChangeInput(e,1)}
+                      placeholder="Exam Review"
                     />
                   </td>
                   <td>
                     <TextField
-                      name="grade"
-                      value={(assignment.dueDate)? assignment.dueDate : "YYYY-MM-DD"}  
+                      name="assignmentDueDate"
+                      value={(assignment.dueDate)? assignment.dueDate : ""}  
                       type="text"
                       onChange={(e) => onChangeInput(e, 2)}
+                      placeholder="(YYYY-MM-DD)"
                     />
                   </td>
                   <td>
                     <TextField
-                      name="grade"
+                      name="assignmentCourseID"
                       value={(assignment.courseId)? assignment.courseId : ""}  
                       type="text"
                       onChange={(e) => onChangeInput(e, 4)}
+                      placeholder="00000"
                     />
                   </td>
                 </tbody>

@@ -18,7 +18,13 @@ function ListAssignment(props) {
  
   const fetchAssignments = () => { // fetch all assignments
     console.log("fetchAssignments");
-    fetch(`${SERVER_URL}/assignment`)
+    const token = sessionStorage.getItem('jwt');
+
+    fetch(`${SERVER_URL}/assignment`, {
+      headers: {
+        'Authorization' : `${token}`
+      }
+    })
     .then((response) => response.json() ) 
     .then((data) => { 
       console.log("assignment length "+data.length);
@@ -30,19 +36,23 @@ function ListAssignment(props) {
   // delete assignment
   const deleteAssignment = (assignmentId) => {
     console.log(assignmentId);
+    const token = sessionStorage.getItem('jwt');
     
     // Initial delete (should fail UNLESS grades do not exist)
     fetch(`${SERVER_URL}/assignment/delete/${assignmentId}` , 
     {  
       method: 'DELETE', 
-      headers: { 'Content-Type': 'application/json', }
+      headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization' : `${token}`,
+      }
     } )
     .then(res => {
       if (res.ok) { // This should ONLY pass when grades do NOT exist
-        // fetchAssignment(assignmentId);
+
         setMessage("Assignments deleted.");
         window.location.reload();
-        // history.push(`/`);
+
       } else { // when grades DO exist
 
         if(res.status === 400){ // This should fail on 400 because grades do exist
@@ -53,7 +63,10 @@ function ListAssignment(props) {
                 fetch(`${SERVER_URL}/assignment/delete/${assignmentId}?force=true` , 
                 {  
                   method: 'DELETE', 
-                  headers: { 'Content-Type': 'application/json', }
+                  headers: { 
+                    'Content-Type': 'application/json', 
+                    'Authorization' : `${token}`, 
+                  }
                 } )
                 .then(res => {
                   if (res.ok) {
