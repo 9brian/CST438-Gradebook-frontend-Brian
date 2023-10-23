@@ -29,7 +29,11 @@ function EditAssignment(props) {
     const fetchAssignment = ( ) => { // fetch assignment
       setMessage('');
       console.log("fetchAssignment "+assignmentId);
-      fetch(`${SERVER_URL}/assignment/${assignmentId}`)
+      const token = sessionStorage.getItem('jwt');
+
+      fetch(`${SERVER_URL}/assignment/${assignmentId}`, {
+          headers: { 'Authorization' : `${token}` }
+      })
       .then((response) => response.json()) 
       .then((data) => { setAssignment(data) })        
       .catch(err => { 
@@ -45,13 +49,15 @@ function EditAssignment(props) {
     const saveAssignment = ( ) => {
       setMessage(''); 
       console.log("Assignment.save ");
-      // console.log(`${assignmentId}` + " save");
-      // console.log(assignment);
+      const token = sessionStorage.getItem('jwt');
       
       fetch(`${SERVER_URL}/assignment/update/${assignmentId}` , 
         {  
             method: 'PUT', 
-            headers: { 'Content-Type': 'application/json', }, 
+            headers: { 
+                  'Content-Type': 'application/json', 
+                  'Authorization' : `${token}`
+                }, 
             body: JSON.stringify( assignment )
         } )
       .then(res => {
@@ -97,7 +103,7 @@ function EditAssignment(props) {
           setAssignment(updatedAssignment);
           
           if(pattern.test(e.target.value)){
-            console.log(updatedAssignment);
+            
           } else {
             setMessage("Date needs the correct format!");
           }
